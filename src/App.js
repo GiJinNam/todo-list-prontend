@@ -1,6 +1,6 @@
 import "./App.css";
 import Todo from "./Todo";
-import React from "react";
+import React, { Component } from "react";
 import { Paper, List, Container } from "@material-ui/core";
 import AddTodo from "./AddTodo";
 
@@ -29,11 +29,9 @@ class App extends React.Component {
     const thisItems = this.state.items;
     console.log("전에 업데이트 되었던 아이템 :", this.state.items);
     const newItems = thisItems.filter((e) => e.id !== item.id);
-    this.setState =
-      ({ items: newItems },
-      () => {
-        console.log("업데이트 되었던 아이템", this.state.items);
-      });
+    this.setState({ items: newItems }, () => {
+      console.log("업데이트 되었던 아이템", this.state.items);
+    });
   };
 
   render() {
@@ -56,6 +54,28 @@ class App extends React.Component {
       </div>
     );
   }
+}
+
+componentDidMount() {
+  const requestOptions = {
+    method : "GET",
+    headers : {"Content-Type": "application/json"},
+  };
+
+  fetch("https://localhost:8080/todo", requestOptions)
+  .then((response) => response.json())
+  .then(
+    (response) => {
+      this.setState({
+        items: response.data,
+      });
+    },
+    (error) => {
+      this.setState({
+        error,
+      });
+    }
+  );
 }
 
 export default App;

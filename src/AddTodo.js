@@ -11,7 +11,7 @@ class AddTodo extends React.Component {
   onInputChange = (e) => {
     const thisItem = this.state.item;
     thisItem.title = e.target.value;
-    this.setState = { item: thisItem };
+    this.setState({ item: thisItem });
     console.log(thisItem);
   };
 
@@ -37,7 +37,7 @@ class AddTodo extends React.Component {
               onChange={this.onInputChange}
               value={this.state.item.title}
               onKeyPress={this.enterkeyEventHandler}
-            ></TextField>
+            />
           </Grid>
           <Grid xs={1} md={1} item>
             <Button

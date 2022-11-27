@@ -17,21 +17,48 @@ class Todo extends React.Component {
   }
 
   offReadOnlyMode = () => {
-    console.log("Event");
+    console.log("Event", this.state.readOnly);
+    this.setState({ readOnly: false }, () => {
+      console.log("읽기전용으로 변경하시겠습니까? ", this.state.readOnly);
+    });
   };
 
   deleteEvenetHandler = () => {
     this.delete(this.state.item);
   };
 
+  enterKeyEventHandler = (e) => {
+    if (e.key === "Enter") {
+      this.setState({ readOnly: true });
+    }
+  };
+
+  editEventHandler = (e) => {
+    const thisItem = this.state.item;
+    thisItem.title = e.target.value;
+    this.setState({ item: thisItem });
+  };
+
+  checkboxEventHandler = (e) => {
+    const thisItem = this.state.item;
+    thisItem.done = !thisItem.done;
+    this.setState({ item: thisItem });
+  };
+
   render() {
     const item = this.state.item;
     return (
       <ListItem>
-        <Checkbox Checked={item.done} disableRipple />
+        <Checkbox checked={item.done} onChange={this.checkboxEventHandler} />
         <ListItemText>
           <InputBase
-            inputProps={{ "aria-label ": "naked" }}
+            inputProps={{
+              "aria-label ": "naked",
+              readOnly: this.state.readOnly,
+            }}
+            onClick={this.offReadOnlyMode}
+            onChange={this.editEventHandler}
+            onKeyPress={this.enterKeyEventHandler}
             type="text"
             id={item.id}
             name={item.id}
@@ -40,30 +67,18 @@ class Todo extends React.Component {
             fullWidth={true}
           />
         </ListItemText>
+
         <ListItemSecondaryAction>
           <IconButton
             aria-label="Delete Todo"
             onClick={this.deleteEvenetHandler}
           >
-            <DeleteOutlined></DeleteOutlined>
+            <DeleteOutlined />
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
     );
   }
 }
-//     return (
-//       <div className="Todo">
-//         <input
-//           type="checkbox"
-//           id={this.state.item.id}
-//           name={this.state.item.id}
-//           checkd={this.state.item.done}
-//         />
-//         <label id={this.state.id}>{this.state.item.title}</label>
-//       </div>
-//     );
-//   }
-// }
 
 export default Todo;
